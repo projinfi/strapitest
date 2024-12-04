@@ -5,22 +5,24 @@ function App() {
   const [blogs, setBlogs] = useState([]);
 
   useEffect(() => {
-    // Fetch data from the Strapi API
-    fetch('http://localhost:1337/api/blogs?populate=*')
+    fetch('https://strapibackend-xvmv.onrender.com/api/blogs?populate=*')
       .then((response) => response.json())
       .then((data) => {
-        // Map the fetched data to match the required structure
-        const formattedBlogs = data.data.map((blog) => ({
-          id: blog.id,
-          title: blog.Title,
-          desc: blog.Description,
-          coverImg: `http://localhost:1337${blog.Image?.formats?.thumbnail?.url || blog.Image?.url || '/defaultImage.jpg'}` // Add image URL
-        }));
+        const formattedBlogs = data.data.map((blog) => {
+          const coverImg = `https://strapibackend-xvmv.onrender.com${blog.Image?.formats?.thumbnail?.url || blog.Image?.url || '/defaultImage.jpg'}`;
+          console.log('Image URL:', coverImg); // Log the image URL
+          return {
+            id: blog.id,
+            title: blog.Title,
+            desc: blog.Description,
+            coverImg,
+          };
+        });
         setBlogs(formattedBlogs);
-        console.log(formattedBlogs);
       })
       .catch((error) => console.error('Error fetching blogs:', error));
   }, []);
+  
 
   return (
     <div className="App">
